@@ -20,3 +20,8 @@ dotnet new blazorwasm -o EcommerceClient
 ```sh
 dotnet new classlib -o EcommerceSharedLibrary
 ```
+
+## Server
+
+- Paquetes nugets:
+  - Microsoft.AspNetCore.Components.WebAssembly.Server
