@@ -1,4 +1,6 @@
+using EcommerceServer;
 using EcommerceServer.Data;
+using EcommerceSharedLibrary.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,12 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-// Al iniciar la App
-// Configuramos el DbContext con la conexion a la BD
+/** Al iniciar la App **/
+// Configuramos el DbContext con la conexión a la BD
 builder.Services.AddDbContext<AppDbContext>(options=>{
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnection")?? throw new InvalidOperationException("No se logro conectar a la BD"));
 });
-
+// Inyección de dependencia
+builder.Services.AddScoped<IProduct, ProductRepository>();
 
 var app = builder.Build();
 
