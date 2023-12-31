@@ -35,25 +35,31 @@
                     <div class="card-footer">
                         <div class="form-group mt-3">
                             @if (ShowSaveButton){
-                                <button class="btn btn-primary" type="submit">Save Product</button>
+                                <button type="submit" class="btn btn-outline-primary">
+                                <i class="fa fa-plus"></i>
+                                Save Product</button>
                             }
                             <BusyButtonComponent ShowBusyButton="ShowBusyButton"></BusyButtonComponent>
                         </div>
-                        <button type="submit" class="btn btn-outline-primary">
-                            <i class="fa fa-plus"></i>
-                            Save Product</button>
                     </div>
                 </div>
             </EditForm>
         </div>
     </div>
 </div>
+<MessageDialog @ref="messageDialog"></MessageDialog>
 
 @code {
     Product MyProduct = new();
     string ImageUploadMessage = "";
     async Task HandleeSaveProduct(){
-        
+        ShowSaveButton = false;
+        ShowBusyButton = !ShowSaveButton;
+        if(string.IsNullOrEmpty(MyProduct.Base64Img)){
+            messageDialog!.SetDialogValues("warning", "Debes de seleccionar una imagen");
+            SetMessageDialog();
+            return;
+        }
     }
     async Task UploadImage(InputFileChangeEventArgs e){
         // Obtener y verificamos el formato de la imagen
@@ -72,7 +78,17 @@
         ImageUploadMessage = "Se necesita una imagen PNG.";
         return;
     }
+    MessageDialog? messageDialog; // Instanciamos la referencia
     public bool ShowBusyButton {get; set;}
     public bool ShowSaveButton {get; set;}
 
+    private async void SetMessageDialog()
+    {
+        // Mostrar el mensaje
+        await messageDialog!.ShowMessage();
+        // Cambiamos los estados de los botones
+        ShowBusyButton = false;
+        ShowSaveButton = !ShowBusyButton;
+        StateHasChanged(); // guardamos la confirmacion de los cambios de estado
+    }
 }
