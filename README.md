@@ -50,3 +50,23 @@ dotnet ef database update
   - ServiceResponse: True/False y mensaje.
 - Interfaces
   - IProduct: AddProduct y GetAllProducts.
+
+## Client
+
+- Se instalo LibMan para obtener Librerias
+
+```sh
+# Instalar la CLS de LibMan
+dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+# Inicializar LibMan para crear el archivo, por defecto el provider es cdnjs
+libman init
+# Agregamos la Libreria a utilizar 
+libman install font-awesome@6.5.1 --provider cdnjs --destination wwwroot/font-awesome
+```
+
+> Nota: Agregamos el CSS y Js en el archivo index que esta dentro de wwwroot.
+
+- Pages:
+  - AddOrUpdateProductComponent: Creacion del formulario para registrar un producto.
+  - BusyButtonComponent: boton de cargando cuando se realice una accion.
+- _Imports: agregar las referencias que se utilizaran en todo el proyecto

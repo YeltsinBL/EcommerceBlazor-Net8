@@ -13,9 +13,10 @@ public class Product
     public string? Description { get; set; }
     [Required, Range(0.1,9999.99)]
     public decimal? Price { get; set; }
-    [Required, DisplayName("Product Image")]
+    [Required(ErrorMessage ="Choose File is required."), DisplayName("Product Image")]
     public string? Base64Img { get; set; }
+    [Required, Range(1,9999.99)]
     public int Quantity { get; set; }
-    public bool Featured { get; set; }
+    public bool Featured { get; set; } = false;
     public DateTime DateUploaded { get; set; }= DateTime.Now;
 }

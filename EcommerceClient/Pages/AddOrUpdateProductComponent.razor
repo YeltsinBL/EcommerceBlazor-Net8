@@ -1,0 +1,78 @@
+﻿@page "/add-product"
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <EditForm Model="MyProduct" Enhance OnValidSubmit="HandleeSaveProduct">
+                <DataAnnotationsValidator/>
+                <ValidationSummary/>
+                <div class="card">
+                    <div class="card-header">Add Product</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <InputText @bind-Value="MyProduct.Name" class="form-control"></InputText>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label">Price</label>
+                            <InputNumber @bind-Value="MyProduct.Price" class="form-control"></InputNumber>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label">Quantity</label>
+                            <InputNumber @bind-Value="MyProduct.Quantity" class="form-control"></InputNumber>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label">Description</label>
+                            <InputTextArea @bind-Value="MyProduct.Description" class="form-control"></InputTextArea>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label @(ImageUploadMessage == ""?"":"text-danger")">
+                                @(ImageUploadMessage == ""?"Upload Image": ImageUploadMessage)
+                            </label>
+                            <InputFile class="form-control" OnChange="UploadImage"></InputFile>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-group mt-3">
+                            @if (ShowSaveButton){
+                                <button class="btn btn-primary" type="submit">Save Product</button>
+                            }
+                            <BusyButtonComponent ShowBusyButton="ShowBusyButton"></BusyButtonComponent>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">
+                            <i class="fa fa-plus"></i>
+                            Save Product</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    Product MyProduct = new();
+    string ImageUploadMessage = "";
+    async Task HandleeSaveProduct(){
+        
+    }
+    async Task UploadImage(InputFileChangeEventArgs e){
+        // Obtener y verificamos el formato de la imagen
+        if(e.File.Name.ToLower().Contains(".png")){
+            var format = "image/png"; // crear formato
+            var resizeImage = await e.File.RequestImageFileAsync(format, 300, 300); // cambiar el tamano
+            var buffer = new byte[resizeImage.Size]; //cambiar tamano del buffer
+            await resizeImage.OpenReadStream().ReadAsync(buffer); //obtener acceso al tamano
+            // convertimos los datos del tamano especificando el formato
+            var imageData = $"data:{format}; base64,{Convert.ToBase64String(buffer)}"; 
+            ImageUploadMessage = "";
+            MyProduct.Base64Img = imageData;
+            imageData = "";
+            return;
+        }
+        ImageUploadMessage = "Se necesita una imagen PNG.";
+        return;
+    }
+    public bool ShowBusyButton {get; set;}
+    public bool ShowSaveButton {get; set;}
+
+}

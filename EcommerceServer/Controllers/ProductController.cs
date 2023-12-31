@@ -7,13 +7,9 @@ namespace EcommerceServer.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductController:Controller
+// Inyectamos como un constructor primario
+public class ProductController(IProduct _product) : Controller
 {
-    private readonly IProduct _product;
-    public ProductController(IProduct product)
-    {
-        _product = product;
-    }
 
     [HttpGet]
     public async Task<ActionResult<List<Product>>> GetAllProducts(bool featured){
